@@ -62,7 +62,7 @@ public class SpencerCode extends LinearOpMode {
     private DcMotor motor = null;
     private DistanceSensor distanceSensor = null;
     private Servo servo = null;
-    private int robotLength = null;
+    private int robotLength = 0;
     private TouchSensor button = null;
 
 
@@ -91,7 +91,7 @@ public class SpencerCode extends LinearOpMode {
         waitForStart();
         runtime.reset();
         double motorPower;
-        BasicStateEnum state = null;
+        enumStates state = null;
         servo.setPosition(0);
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
