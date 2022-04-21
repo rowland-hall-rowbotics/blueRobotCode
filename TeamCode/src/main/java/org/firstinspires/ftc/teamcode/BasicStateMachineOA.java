@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -16,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Disabled
 public class BasicStateMachineOA extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
-    private BasicStateMachineEnums state =  BasicStateMachineEnums.SCANNING;
+    private enumStates state =  enumStates.SEARCHING;
     private DistanceSensor dSensor = null;
     private DcMotor motor = null;
     private Servo servo = null;
@@ -44,21 +45,21 @@ public class BasicStateMachineOA extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            if (state == BasicStateMachineEnums.SCANNING) { //Scanning
+            if (state == enumStates.SEARCHING) { //Scanning
                 distance = dSensor.getDistance(DistanceUnit.CM); //read distance sensor
                 if (distance > 0 && distance < (robotLength + armLength)) {//if distance sensor reads greater than 0 less than robotsize + armsize
-                    state = BasicStateMachineEnums.MAKINGSPACE;//set state to making space
+                    state = enumStates.MAKING_SPACE;//set state to making space
                 }
                 if (distance > (robotLength + armLength)) {//if distance sensor greater than robotsize + armsize
-                    state = BasicStateMachineEnums.APPROACHINGWALL;//set state to approaching wall
+                    state = enumStates.APPROACHING_WALL;//set state to approaching wall
                 }
-            } else if (state == BasicStateMachineEnums.MAKINGSPACE) {
+            } else if (state == enumStates.MAKING_SPACE) {
                 distance = dSensor.getDistance(DistanceUnit.CM);
                 if (distance < (robotLength + armLength)) {//if distance sensor reads less than robotsize + armsize
                     motor.setPower(reverseSpeed);//set motor power -.5
                 } else { //else set motor power 0
                     motor.setPower(0);
-                    state = BasicStateMachineEnums.SCANNING;//set state back to scanning
+                    state = enumStates.SEARCHING;//set state back to scanning
                 }
             }
         }
