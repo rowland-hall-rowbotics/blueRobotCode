@@ -6,14 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Autonomous
 public class buttonBot extends LinearOpMode {
     boolean buttonPushed = false;
-
-    public enum enumStates {
-        SEARCHING,
-        APPROACHING_WALL,
-        MAKING_SPACE,
-        RESETTING,
-        LOWERING
-    }
     enumStates state;
 
     @Override
