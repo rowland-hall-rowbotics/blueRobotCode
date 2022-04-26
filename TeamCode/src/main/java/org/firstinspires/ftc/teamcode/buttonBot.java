@@ -43,6 +43,7 @@ public class buttonBot extends LinearOpMode {
                     state = enumStates.LOWERING;
                 }
                 if (robot.button.isPressed()) {
+                    buttonPushed = true;
                     state = enumStates.RESETTING;
                 }
                 //might be affected by the arm triggering the ultrasonic sensor
@@ -70,6 +71,13 @@ public class buttonBot extends LinearOpMode {
             }
 
             robot.wheels.setPower(motorPower);
+
+            telemetry.addData("Button Pushed", buttonPushed);
+            telemetry.addData("Distance Sensor (CM)", robot.distanceSensor.getDistance(DistanceUnit.CM));
+            telemetry.addData("Servo Position", robot.servo.getPosition());
+            telemetry.addData("State", state);
+            telemetry.update();
+
         }
     }
 
