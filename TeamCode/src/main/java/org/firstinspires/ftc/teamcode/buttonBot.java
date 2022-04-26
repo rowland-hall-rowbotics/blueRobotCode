@@ -75,6 +75,7 @@ public class buttonBot extends LinearOpMode {
             telemetry.addData("Button Pushed", buttonPushed);
             telemetry.addData("Distance Sensor (CM)", robot.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("Servo Position", robot.servo.getPosition());
+            telemetry.addData("State", state);
             telemetry.update();
 
         }
