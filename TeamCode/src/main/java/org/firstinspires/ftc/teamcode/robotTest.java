@@ -10,8 +10,11 @@ public class robotTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
-        telemetry.addData("Distance", robot.dSensor.getDistance(DistanceUnit.CM));
-        telemetry.addData("Servo Position", robot.servo.getPosition());
-        telemetry.update();
+
+        while(opModeIsActive()) {
+            telemetry.addData("Distance", robot.distanceSensor.getDistance(DistanceUnit.CM));
+            telemetry.addData("Servo Position", robot.servo.getPosition());
+            telemetry.update();
+        }
     }
 }

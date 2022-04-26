@@ -61,7 +61,7 @@ public class SpencerCode extends LinearOpMode {
     private DcMotor motor = null;
     private DistanceSensor distanceSensor = null;
     private Servo servo = null;
-    private int robotLength = null;
+    private int robotLength = 0;
     private TouchSensor button = null;
 
 
@@ -90,19 +90,19 @@ public class SpencerCode extends LinearOpMode {
         waitForStart();
         runtime.reset();
         double motorPower;
-        BasicStateEnum state = null;
+        enumStates state = null;
         servo.setPosition(0);
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             motorPower = 0;
-            if(state == BasicStateEnum.SCANNING) {
+            if(state == enumStates.SEARCHING) {
                 //Scan for wall
 
                 //If wall is sensed - move to DRIVEANDLOWER
                 if(distanceSensor.getDistance(DistanceUnit.CM) > 0){
-                    state = BasicStateEnum.APPROCHINGWALL;
+                    state = enumStates.APPROACHING_WALL;
                 }
-            } else if(state == BasicStateEnum.APPROCHINGWALL){
+            } else if(state == enumStates.APPROACHING_WALL){
                 //Drive forward and lower arm
                 motorPower = 1;
                 servo.setPosition(1);
@@ -110,32 +110,32 @@ public class SpencerCode extends LinearOpMode {
 
                 //If touch sensor pressed - move to BACKWARDANDRAISING
                 if(distanceSensor.getDistance(DistanceUnit.CM) < robotLength && servo.getPosition() == 1){
-                    state = BasicStateEnum.LOWERING;
+                    state = enumStates.LOWERING;
                 }
                 if(button.isPressed()) {
-                    state = BasicStateEnum.RESETTING;
+                    state = enumStates.RESETTING;
                 }
                 //might be affected by the arm triggering the ultrasonic sensor
-            } else if(state == BasicStateEnum.LOWERING){
+            } else if(state == enumStates.LOWERING){
                 //Lower arm
                 servo.setPosition(1);
                 //If wall is too close to robot for arm to lower - move to BACKUPTOLOWER
                 if(distanceSensor.getDistance(DistanceUnit.CM) < robotLength - 5){
-                    state = BasicStateEnum.MAKINGSPACE;
+                    state = enumStates.MAKING_SPACE;
                 }
                 //If arm fully lowered - move to FORWARD
                 if(servo.getPosition() == 1) {
-                    state = BasicStateEnum.APPROCHINGWALL;
+                    state = enumStates.APPROACHING_WALL;
                 }
-            } else if(state == BasicStateEnum.MAKINGSPACE){
+            } else if(state == enumStates.MAKING_SPACE){
                 //Back up to be able to lower arm
                 motorPower = -1;
                 //If backed up far enough - move to LOWER
                 if(distanceSensor.getDistance(DistanceUnit.CM) < robotLength){
-                    state = BasicStateEnum.LOWERING;
+                    state = enumStates.LOWERING;
                 }
 
-            } else if(state == BasicStateEnum.RESETTING){
+            } else if(state == enumStates.RESETTING){
                 //Drive backward and retract arm
                 servo.setPosition(0);
                 motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -144,7 +144,7 @@ public class SpencerCode extends LinearOpMode {
                 }
 
                 if(motor.getCurrentPosition() == 0 && servo.getPosition() == 0){
-                    state = BasicStateEnum.SCANNING;
+                    state = enumStates.SEARCHING;
                 }
 
 
