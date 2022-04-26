@@ -16,8 +16,8 @@ public class HWC {
     public Servo servo;
     public DistanceSensor distanceSensor;
     public TouchSensor button;
-
-    public static final double ONE_CM_IN_PPR = 7.9;
+    public static final double EXTENDED_ROBOT_LENGTH = 50;
+    public static final double ROBOT_LENGTH = 0;
 
     public HWC(@NonNull HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -32,20 +32,15 @@ public class HWC {
         wheels.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public double calculateWheelCounts(double distanceInCM){
-        return distanceInCM * ONE_CM_IN_PPR;
-    }
+    public void driveToStart(double wheelPower){
+        int wheelCounts = wheels.getCurrentPosition();
 
-    public void drive(double wCounts, double wheelPower){
-        int wheelCounts = 0;
-
-        wheels.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         wheels.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        while((Math.abs(wheelCounts) < wCounts)){
+        while(wheelCounts > 0){
             wheelCounts = wheels.getCurrentPosition();
 
-            if(Math.abs(wheelCounts) < wCounts){
+            if(wheelCounts > 0){
                 wheels.setPower(wheelPower);
             } else {
                 wheels.setPower(0);
@@ -53,5 +48,9 @@ public class HWC {
         }
 
         wheels.setPower(0);
+    }
+
+    public void raiseArm(){
+        servo.setPosition(0.2);
     }
 }
