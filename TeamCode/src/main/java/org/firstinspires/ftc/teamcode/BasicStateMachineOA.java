@@ -16,7 +16,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Autonomous(name="BasicStateMachineOA", group="Iterative Opmode")
 @Disabled
 public class BasicStateMachineOA extends LinearOpMode {
-    private ElapsedTime runtime = new ElapsedTime();
     private enumStates state =  enumStates.SEARCHING;
     private DistanceSensor dSensor = null;
     private DcMotor motor = null;
