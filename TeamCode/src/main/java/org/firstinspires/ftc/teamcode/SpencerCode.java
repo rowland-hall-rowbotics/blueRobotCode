@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -166,6 +167,7 @@ public class SpencerCode extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "motor (%.2f)", motorPower);
             telemetry.addData("Distance", "distace (%.2f)", distanceSensor.getDistance(DistanceUnit.CM));
+            telemetry.addData("Servo", "servo (%.2f)", servo.getPosition());
             telemetry.update();
         }
     }
