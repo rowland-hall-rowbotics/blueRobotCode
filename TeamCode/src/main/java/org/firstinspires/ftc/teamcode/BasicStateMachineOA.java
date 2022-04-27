@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -15,7 +16,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Autonomous(name="BasicStateMachineOA", group="Iterative Opmode")
 @Disabled
 public class BasicStateMachineOA extends LinearOpMode {
-    private ElapsedTime runtime = new ElapsedTime();
     private enumStates state =  enumStates.SEARCHING;
     private DistanceSensor dSensor = null;
     private DcMotor motor = null;
