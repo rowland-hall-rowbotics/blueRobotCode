@@ -66,7 +66,7 @@ public class buttonBot extends LinearOpMode {
                 }
             } else if (state == enumStates.RESETTING){
                 robot.raiseArm();
-                robot.driveToStart(0.2);
+                robot.driveToStart(-0.2);
             }
 
             robot.wheels.setPower(HWC.motorPower);
@@ -75,6 +75,8 @@ public class buttonBot extends LinearOpMode {
             telemetry.addData("Distance Sensor (CM)", robot.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("Servo Position", robot.servo.getPosition());
             telemetry.addData("Encoder Value", robot.wheels.getCurrentPosition());
+            telemetry.addData("Motor Power Variable", HWC.motorPower);
+            telemetry.addData("Motor Power from Motor", robot.wheels.getPower());
             telemetry.addData("State", state);
             telemetry.update();
 

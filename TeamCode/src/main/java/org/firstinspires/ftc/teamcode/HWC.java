@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class HWC {
@@ -30,16 +31,13 @@ public class HWC {
         button = hardwareMap.get(TouchSensor.class, "button");
 
         wheels.setDirection(DcMotor.Direction.REVERSE);
-        wheels.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void driveToStart(double wheelPower){
-        int wheelCounts = wheels.getCurrentPosition();
-
-        wheels.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        int wheelCounts = Math.abs(wheels.getCurrentPosition());
 
         while(wheelCounts > 0){
-            wheelCounts = wheels.getCurrentPosition();
+            wheelCounts = Math.abs(wheels.getCurrentPosition());
 
             if(wheelCounts > 0){
                 motorPower = wheelPower;
@@ -50,5 +48,6 @@ public class HWC {
 
         motorPower = 0;
     }
+
     public void raiseArm(){ servo.setPosition(0.2); }
 }
