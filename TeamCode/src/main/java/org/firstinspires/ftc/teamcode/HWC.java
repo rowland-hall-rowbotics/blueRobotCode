@@ -16,6 +16,7 @@ public class HWC {
     public Servo servo;
     public DistanceSensor distanceSensor;
     public TouchSensor button;
+    public static double motorPower = 0.0;
     public static final double EXTENDED_ROBOT_LENGTH = 50;
     public static final double ROBOT_LENGTH = 0;
 
@@ -41,16 +42,13 @@ public class HWC {
             wheelCounts = wheels.getCurrentPosition();
 
             if(wheelCounts > 0){
-                wheels.setPower(wheelPower);
+                motorPower = wheelPower;
             } else {
-                wheels.setPower(0);
+                motorPower = 0;
             }
         }
 
-        wheels.setPower(0);
+        motorPower = 0;
     }
-
-    public void raiseArm(){
-        servo.setPosition(0.2);
-    }
+    public void raiseArm(){ servo.setPosition(0.2); }
 }
