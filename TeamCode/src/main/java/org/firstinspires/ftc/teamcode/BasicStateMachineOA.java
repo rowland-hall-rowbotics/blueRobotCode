@@ -23,8 +23,8 @@ public class BasicStateMachineOA extends LinearOpMode {
     private TouchSensor touch = null;
 
     private double distance;
-    private double robotLength = 34.3;
-    private double armLength = 12.7;
+    private final double ROBOT_LENGTH = 34.3;
+    private final double ARM_LENGTH = 12.7;
     private double reverseSpeed = -.5;
 
     @Override
@@ -46,15 +46,15 @@ public class BasicStateMachineOA extends LinearOpMode {
         while (opModeIsActive()) {
             if (state == enumStates.SEARCHING) { //Scanning
                 distance = dSensor.getDistance(DistanceUnit.CM); //read distance sensor
-                if (distance > 0 && distance < (robotLength + armLength)) {//if distance sensor reads greater than 0 less than robotsize + armsize
+                if (distance > 0 && distance < (ROBOT_LENGTH + ARM_LENGTH)) {//if distance sensor reads greater than 0 less than robotsize + armsize
                     state = enumStates.MAKING_SPACE;//set state to making space
                 }
-                if (distance > (robotLength + armLength)) {//if distance sensor greater than robotsize + armsize
+                if (distance > (ROBOT_LENGTH + ARM_LENGTH)) {//if distance sensor greater than robotsize + armsize
                     state = enumStates.APPROACHING_WALL;//set state to approaching wall
                 }
             } else if (state == enumStates.MAKING_SPACE) {
                 distance = dSensor.getDistance(DistanceUnit.CM);
-                if (distance < (robotLength + armLength)) {//if distance sensor reads less than robotsize + armsize
+                if (distance < (ROBOT_LENGTH + ARM_LENGTH)) {//if distance sensor reads less than robotsize + armsize
                     motor.setPower(reverseSpeed);//set motor power -.5
                 } else { //else set motor power 0
                     motor.setPower(0);
