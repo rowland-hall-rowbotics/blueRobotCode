@@ -9,9 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Autonomous
 public class buttonBot extends LinearOpMode {
     boolean buttonPushed = false;
-    double distanceDriven = 0.0;
-    double motorPower = 0.0;
-    enumStates state;
+    enumStates state = enumStates.SEARCHING;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -19,13 +17,14 @@ public class buttonBot extends LinearOpMode {
 
         telemetry.addData("Status", "Initializing");
         telemetry.update();
-        robot.servo.setPosition(0.2);
+        robot.servo.setPosition(0);
 
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
         waitForStart();
         while(opModeIsActive()) {
+            HWC.motorPower = 0.0;
             if (state == enumStates.SEARCHING) {
                 if (robot.distanceSensor.getDistance(DistanceUnit.CM) > 0 && robot.distanceSensor.getDistance(DistanceUnit.CM) < 50) {
                     state = enumStates.MAKING_SPACE;
@@ -35,11 +34,11 @@ public class buttonBot extends LinearOpMode {
                 }
             } else if (state == enumStates.APPROACHING_WALL) {
                 //Drive forward and lower arm
-                motorPower = 1;
-                robot.servo.setPosition(0.8);
+                HWC.motorPower = 0.2;
+                robot.servo.setPosition(0.96);
                 //If closer than distance from distance sensor to fully extended touch sensor - move to LOWER
 
-                if (robot.distanceSensor.getDistance(DistanceUnit.CM) < HWC.ROBOT_LENGTH && robot.servo.getPosition() != 1) {
+                if (robot.distanceSensor.getDistance(DistanceUnit.CM) < HWC.ROBOT_LENGTH && robot.servo.getPosition() != 0.96) {
                     state = enumStates.LOWERING;
                 }
                 if (robot.button.isPressed()) {
@@ -49,32 +48,33 @@ public class buttonBot extends LinearOpMode {
                 //might be affected by the arm triggering the ultrasonic sensor
             } else if (state == enumStates.LOWERING) {
                 //Lower arm
-                robot.servo.setPosition(1);
+                robot.servo.setPosition(0.96);
                 //If wall is too close to robot for arm to lower - move to BACKUP_TO_LOWER
                 if (robot.distanceSensor.getDistance(DistanceUnit.CM) < HWC.ROBOT_LENGTH - 5) {
                     state = enumStates.MAKING_SPACE;
                 }
                 //If arm fully lowered - move to FORWARD
-                if (robot.servo.getPosition() == 1) {
+                if (robot.servo.getPosition() == 0.96) {
                     state = enumStates.APPROACHING_WALL;
                 }
             } else if (state == enumStates.MAKING_SPACE) {
                 if (robot.distanceSensor.getDistance(DistanceUnit.CM) < HWC.EXTENDED_ROBOT_LENGTH) {//if distance sensor reads less than robotsize + armsize
-                    motorPower = -0.5;//set motor power -.5
-                } else { //else set motor power 0
-                    motorPower = 0;
-                    state = enumStates.SEARCHING;//set state back to scanning
+                    HWC.motorPower = -0.2; // slowMotor = -0.2;
+                } else {
+                    HWC.motorPower = 0; // motorOff = 0;
+                    state = enumStates.SEARCHING;
                 }
             } else if (state == enumStates.RESETTING){
                 robot.raiseArm();
-                robot.driveToStart(0.5);
+                robot.driveToStart(0.2);
             }
 
-            robot.wheels.setPower(motorPower);
+            robot.wheels.setPower(HWC.motorPower);
 
             telemetry.addData("Button Pushed", buttonPushed);
             telemetry.addData("Distance Sensor (CM)", robot.distanceSensor.getDistance(DistanceUnit.CM));
             telemetry.addData("Servo Position", robot.servo.getPosition());
+            telemetry.addData("Encoder Value", robot.wheels.getCurrentPosition());
             telemetry.addData("State", state);
             telemetry.update();
 
